@@ -108,6 +108,11 @@ public class frmBiodata extends javax.swing.JFrame {
         btnExit.setBounds(200, 10, 60, 30);
 
         btnNew.setText("NEW");
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnNew);
         btnNew.setBounds(10, 10, 60, 30);
 
@@ -178,6 +183,16 @@ public class frmBiodata extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(897, 558));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        // TODO add your handling code here:
+        txtId.setText("");
+        txtNama.setText("");
+        txtNik.setText("");
+        txtJabatan.setText("");
+        txtNo.setText("");
+        txtAlamat.setText("");
+    }//GEN-LAST:event_btnNewActionPerformed
 
     /**
      * @param args the command line arguments
