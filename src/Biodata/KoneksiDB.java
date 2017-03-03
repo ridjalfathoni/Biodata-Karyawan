@@ -1,3 +1,5 @@
+package Biodata;
+
 
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
@@ -7,23 +9,19 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
+/*
  *
  * @author Ridjal Fathoni
  */
 public class KoneksiDB {
+
     public static Connection setKoneksi() {
         String konek = "jdbc:mysql://localhost:3306/db_karyawan";
         Connection koneksi = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            koneksi = (Connection) DriverManager.getConnection(konek,"root","");
+            koneksi = (Connection) DriverManager.getConnection(konek, "root", "");
             System.out.println("Koneksi Berhasil");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(KoneksiDB.class.getName()).log(Level.SEVERE,
@@ -36,6 +34,7 @@ public class KoneksiDB {
         }
         return koneksi;
     }
+
     public static int execute(String SQL) {
         int status = 0;
         Connection koneksi = setKoneksi();
@@ -48,6 +47,7 @@ public class KoneksiDB {
         }
         return status;
     }
+
     public static ResultSet executeQuery(String SQL) {
         ResultSet rs = null;
         Connection koneksi = setKoneksi();
@@ -60,6 +60,7 @@ public class KoneksiDB {
         }
         return rs;
     }
+
     static Object GetConnection() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
