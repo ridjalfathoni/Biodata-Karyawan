@@ -5,6 +5,13 @@
  */
 package Biodata;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Ridjal Fathoni
@@ -104,6 +111,11 @@ public class frmBiodata extends javax.swing.JFrame {
         jPanel3.setLayout(null);
 
         btnExit.setText("EXIT");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnExit);
         btnExit.setBounds(200, 10, 60, 30);
 
@@ -117,10 +129,20 @@ public class frmBiodata extends javax.swing.JFrame {
         btnNew.setBounds(10, 10, 60, 30);
 
         btnSave.setText("SAVE");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnSave);
         btnSave.setBounds(70, 10, 60, 30);
 
         btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnDelete);
         btnDelete.setBounds(130, 10, 70, 30);
 
@@ -194,6 +216,47 @@ public class frmBiodata extends javax.swing.JFrame {
         txtAlamat.setText("");
     }//GEN-LAST:event_btnNewActionPerformed
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        if ("".equals(txtId.getText()) || "".equals(txtNama.getText())
+                || "".equals(txtNik.getText()) || "".equals(txtJabatan.getText()) || "".equals(txtNo.getText()) || "".equals(txtAlamat.getText())) {
+            JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.WARNING_MESSAGE);
+        } else {
+            String SQL = "INSERT INTO tb_koneksi(id_karyawan,nama_karyawan,nik,jabatam,no_hpmalamat)"
+                    + "VALUES('" + txtId.getText() + "','" + txtNama.getText() + "','" + txtNik.getText() + "',"
+                    + "'" + txtJabatan.getText() + "','" + txtNo.getText() + "','" + txtAlamat.getText() + "')";
+            int status = KoneksiDB.execute(SQL);
+            if (status == 1) {
+                JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                selectData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Data gagal ditambahkan", "Gagal", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int baris = tblData.getSelectedRow();
+        if (baris != - 1) {
+            String id_karyawan = tblData.getValueAt(baris, 0).toString();
+            String SQL = "DELETE FROM tb_koneksi WHERE NIS='"+id_karyawan+"'";
+            int status = KoneksiDB.execute(SQL);
+            if (status==1) {
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Data gagal dihapus", "Gagal", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih Baris Data Terebih Dahulu", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        selectData();   
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnExitActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -259,4 +322,25 @@ public class frmBiodata extends javax.swing.JFrame {
     private javax.swing.JTextField txtNik;
     private javax.swing.JTextField txtNo;
     // End of variables declaration//GEN-END:variables
+
+    private void selectData() {
+        String kolom[] = {"id_karyawan","nama_karyawan","nik","jabatan","no_hp","alamat"};
+        DefaultTableModel dtm = new DefaultTableModel(null, kolom);
+        String SQL = "SELECT * FROM tb_koneksi";
+        ResultSet rs = KoneksiDB.executeQuery(SQL);
+        try {
+            while(rs.next()) {
+                String id = rs.getString(1);
+                String nama = rs.getString(2);
+                String nik = rs.getString(3);
+                String jabatan = rs.getString(4);
+                String no = rs.getString(5);
+                String data[] = {id,nama,nik,jabatan,no};
+                dtm.addRow(data);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(frmBiodata.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tblData.setModel(dtm);
+    }
 }
